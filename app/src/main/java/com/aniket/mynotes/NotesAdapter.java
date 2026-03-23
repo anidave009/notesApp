@@ -1,0 +1,65 @@
+// NotesAdapter.java
+package com.aniket.mynotes;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.List;
+
+public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
+
+    List<Note> notes;
+    // CHANGE 1: Added a listener field — this holds the click callback from MainActivity
+    OnNoteClickListener listener;
+
+    // CHANGE 2: Interface definition — one method that fires when a card is tapped
+    // MainActivity implements this and decides what to do (start DetailActivity)
+    public interface OnNoteClickListener {
+        void onNoteClick(Note note);
+    }
+
+    // CHANGE 3: Constructor now accepts the listener alongside the notes list
+    public NotesAdapter(List<Note> notes, OnNoteClickListener listener) {
+        this.notes = notes;
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_row, parent, false);
+        return new NoteViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
+        Note note = notes.get(position);
+        holder.title.setText(note.title);
+        holder.content.setText(note.content);
+        holder.date.setText(note.date);
+
+        // CHANGE 4: When the card is tapped, fire the listener with this note
+        // The Adapter doesn't know what happens next — that's MainActivity's job
+        holder.itemView.setOnClickListener(v -> listener.onNoteClick(note));
+    }
+
+    @Override
+    public int getItemCount() {
+        return notes.size();
+    }
+
+    static class NoteViewHolder extends RecyclerView.ViewHolder {
+        TextView title, content, date;
+
+        public NoteViewHolder(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.title);
+            content = itemView.findViewById(R.id.content);
+            date = itemView.findViewById(R.id.dateofnote);
+        }
+    }
+}
