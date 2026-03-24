@@ -52,6 +52,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         return notes.size();
     }
 
+    // add this method inside NotesAdapter class
+    public void updateNotes(List<Note> newNotes) {
+        this.notes = newNotes;
+        // tells RecyclerView the data changed so it redraws the list
+        notifyDataSetChanged();
+    }
     static class NoteViewHolder extends RecyclerView.ViewHolder {
         TextView title, content, date;
 

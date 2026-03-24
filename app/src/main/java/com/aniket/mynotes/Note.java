@@ -1,8 +1,16 @@
 package com.aniket.mynotes;
-public class Note {
-    String title;
-    String content;
-    String date;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "notes_table")
+public class Note{
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+
+    public String title;
+    public String content;
+    public String date;
 
     public Note(String title, String content, String date) {
         this.title = title;
