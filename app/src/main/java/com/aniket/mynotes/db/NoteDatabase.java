@@ -1,10 +1,13 @@
-package com.aniket.mynotes;
+package com.aniket.mynotes.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+
+import com.aniket.mynotes.model.Note;
 
 @Database(entities = {Note.class},version = 1)
 public abstract class NoteDatabase extends RoomDatabase {
@@ -13,14 +16,18 @@ public abstract class NoteDatabase extends RoomDatabase {
 
     public static NoteDatabase getInstance(Context context){
         if(instance==null){
+        Log.d("noteDB","hitting the db");
             instance= Room.databaseBuilder(
               context.getApplicationContext(),
               NoteDatabase.class,
               "notes_database"
             )
-                    .allowMainThreadQueries()
                     .build();
         }
         return instance;
     }
 }
+
+//we are building a database object to wrap up dao calls via this,
+//a single db object is created for whole app , only connection to it
+//is established and checked.

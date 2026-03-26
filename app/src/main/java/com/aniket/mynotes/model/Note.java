@@ -1,4 +1,4 @@
-package com.aniket.mynotes;
+package com.aniket.mynotes.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

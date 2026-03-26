@@ -1,10 +1,13 @@
-package com.aniket.mynotes;
+package com.aniket.mynotes.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.aniket.mynotes.model.Note;
 
 import java.util.List;
 
@@ -19,8 +22,7 @@ public interface NoteDao {
 
     @Delete
     void delete(Note note);
-
     @Query("SELECT * FROM notes_table ORDER BY id desc")
-    List<Note> getAllNotes();
-
+    LiveData<List<Note>> getAllNotes(
+    );
 }

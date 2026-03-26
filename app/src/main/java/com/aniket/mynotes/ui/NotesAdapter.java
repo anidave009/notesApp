@@ -1,5 +1,5 @@
 // NotesAdapter.java
-package com.aniket.mynotes;
+package com.aniket.mynotes.ui;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.aniket.mynotes.model.Note;
+import com.aniket.mynotes.R;
+
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
@@ -31,7 +35,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_row, parent, false);
+                .inflate(R.layout.item_note, parent, false);
         return new NoteViewHolder(view);
     }
 
