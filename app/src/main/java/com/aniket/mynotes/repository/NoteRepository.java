@@ -15,10 +15,6 @@ public class NoteRepository {
 
     private NoteDao noteDao;
     private LiveData<List<Note>> allNotes;
-
-    // ExecutorService runs database operations on a background thread
-    // this is what replaces allowMainThreadQueries()
-    // 4 means a pool of 4 threads available for background work
     private ExecutorService executor = Executors.newFixedThreadPool(4);
 
     public NoteRepository(Application application) {
@@ -29,8 +25,6 @@ public class NoteRepository {
         allNotes = noteDao.getAllNotes();
     }
 
-    // insert runs on background thread via executor
-    // never run database operations on the main thread — it freezes the UI
     public void insert(Note note) {
         executor.execute(() -> noteDao.insert(note));
     }
@@ -42,9 +36,6 @@ public class NoteRepository {
     public void delete(Note note) {
         executor.execute(() -> noteDao.delete(note));
     }
-
-    // LiveData is returned directly — no background thread needed for reads
-    // Room handles this automatically when you return LiveData from DAO
     public LiveData<List<Note>> getAllNotes() {
         return allNotes;
     }

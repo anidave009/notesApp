@@ -27,7 +27,3 @@ public abstract class NoteDatabase extends RoomDatabase {
         return instance;
     }
 }
-
-//we are building a database object to wrap up dao calls via this,
-//a single db object is created for whole app , only connection to it
-//is established and checked.

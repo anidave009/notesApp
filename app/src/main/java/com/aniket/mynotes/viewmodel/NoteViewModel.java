@@ -13,10 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-// AndroidViewModel is used instead of ViewModel because we need
-// Application context to create the Repository
-// never use Activity context here — Activity can be destroyed
-// Application context lives as long as the app lives
 public class NoteViewModel extends AndroidViewModel {
 
     private NoteRepository repository;

@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.notesListRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Adapter starts with empty list — LiveData will populate it
         NotesAdapter adapter = new NotesAdapter(new java.util.ArrayList<>(), note -> {
             Intent intent = new Intent(MainActivity.this, DetailActivity.class);
             intent.putExtra("NOTE_TITLE", note.title);
@@ -33,17 +32,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         recyclerView.setAdapter(adapter);
-
-        // ViewModelProvider creates the ViewModel OR returns the existing one
-        // if Activity is recreated (rotation), the same ViewModel instance is returned
-        // this is how data survives rotation
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-
-        // observe means: whenever the notes list changes in the database,
-        // run this code automatically — no manual refresh needed
-        // onResume() with manual reload is gone — LiveData replaces it
         noteViewModel.getAllNotes().observe(this, notes -> {
-            // this runs automatically whenever Room data changes
             adapter.updateNotes(notes);
         });
 
@@ -52,27 +42,4 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, DetailActivity.class));
         });
     }
-
-    // onResume() with manual db reload is GONE
-    // LiveData handles all of this automatically now
 }
-
-// CHANGE 1: Adapter now takes a second argument — the click listener
-// When a card is tapped, this lambda runs with that note as the argument
-//        recyclerView.setAdapter(new NotesAdapter(fakeNotes, note -> {
-// CHANGE 2: Create an Intent pointing to DetailActivity
-//Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-// CHANGE 3: Attach the note's data as extras (key-value pairs)
-//            intent.putExtra("NOTE_TITLE", note.title);
-//            intent.putExtra("NOTE_CONTENT", note.content);
-//            intent.putExtra("NOTE_DATE", note.date);
-// CHANGE 4: Launch DetailActivity with that data
-//startActivity(intent);
-//        }));
-//        new NotesAdapter(fakeNotes, new NotesAdapter.OnNoteClickListener() {
-//            @Override
-//            public void onNoteClick(Note note) {
-//                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });

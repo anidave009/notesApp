@@ -16,16 +16,16 @@ import java.util.List;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
     List<Note> notes;
-    // CHANGE 1: Added a listener field — this holds the click callback from MainActivity
+    //  1: Added a listener field — this holds the click callback from MainActivity
     OnNoteClickListener listener;
 
-    // CHANGE 2: Interface definition — one method that fires when a card is tapped
+    //  2: Interface definition — one method that fires when a card is tapped
     // MainActivity implements this and decides what to do (start DetailActivity)
     public interface OnNoteClickListener {
         void onNoteClick(Note note);
     }
 
-    // CHANGE 3: Constructor now accepts the listener alongside the notes list
+    //  3: Constructor now accepts the listener alongside the notes list
     public NotesAdapter(List<Note> notes, OnNoteClickListener listener) {
         this.notes = notes;
         this.listener = listener;
@@ -46,7 +46,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         holder.content.setText(note.content);
         holder.date.setText(note.date);
 
-        // CHANGE 4: When the card is tapped, fire the listener with this note
+        //  4: When the card is tapped, fire the listener with this note
         // The Adapter doesn't know what happens next — that's MainActivity's job
         holder.itemView.setOnClickListener(v -> listener.onNoteClick(note));
     }
@@ -59,7 +59,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     // add this method inside NotesAdapter class
     public void updateNotes(List<Note> newNotes) {
         this.notes = newNotes;
-        // tells RecyclerView the data changed so it redraws the list
+        // tells RecyclerView the data d so it redraws the list
         notifyDataSetChanged();
     }
     static class NoteViewHolder extends RecyclerView.ViewHolder {
