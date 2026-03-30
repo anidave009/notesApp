@@ -2,6 +2,9 @@ package com.aniket.mynotes.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.notesListRecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Adapter starts with empty list — LiveData will populate it
@@ -51,6 +54,14 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, DetailActivity.class));
         });
+
+        ImageButton folderNavigation=findViewById(R.id.folderNavigation);
+        folderNavigation.setOnClickListener(v->{
+            Log.d("MainActivity","folderClick log");
+            startActivity(new Intent(MainActivity.this,FolderActivity.class));
+        });
+
+
     }
 
     // onResume() with manual db reload is GONE

@@ -46,7 +46,7 @@
     </LinearLayout>
     
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notesListRecyclerView"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/icons"
@@ -109,6 +109,7 @@
         android:gravity="center"
         >
         <ImageButton
+            android:id="@+id/folderNavigation"
             android:layout_width="26dp"
             android:layout_height="26dp"
             app:backgroundTint="#1AFFFFFF"
