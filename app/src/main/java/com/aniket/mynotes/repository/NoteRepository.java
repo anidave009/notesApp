@@ -12,7 +12,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class NoteRepository {
-
     private NoteDao noteDao;
     private LiveData<List<Note>> allNotes;
 
@@ -29,8 +28,18 @@ public class NoteRepository {
         allNotes = noteDao.getAllNotes();
     }
 
+    // LiveData is returned directly — no background thread needed for reads
+    // Room handles this automatically when you return LiveData from DAO
+    public LiveData<List<Note>> getAllNotes() {
+        return allNotes;
+    }
+
+    // returns live filtered list for a specific folder
+    public LiveData<List<Note>> getNotesByFolder(int folderId) {
+        return noteDao.getNotesByFolder(folderId);
+    }
+
     // insert runs on background thread via executor
-    // never run database operations on the main thread — it freezes the UI
     public void insert(Note note) {
         executor.execute(() -> noteDao.insert(note));
     }
@@ -38,14 +47,8 @@ public class NoteRepository {
     public void update(Note note) {
         executor.execute(() -> noteDao.update(note));
     }
-
     public void delete(Note note) {
         executor.execute(() -> noteDao.delete(note));
     }
 
-    // LiveData is returned directly — no background thread needed for reads
-    // Room handles this automatically when you return LiveData from DAO
-    public LiveData<List<Note>> getAllNotes() {
-        return allNotes;
-    }
 }

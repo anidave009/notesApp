@@ -9,15 +9,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aniket.mynotes.R;
-import com.aniket.mynotes.model.FolderModel;
+import com.aniket.mynotes.model.Folder;
+import com.aniket.mynotes.model.Folder;
 
 import java.util.List;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderViewHolder> {
-    List<FolderModel> folderModelList;
-    public FolderAdapter(List<FolderModel> folderModelList){
-        this.folderModelList=folderModelList;
+    List<Folder> folderList;
+    OnFolderClickListener listener;
+
+    public interface OnFolderClickListener {
+        void onFolderClick(Folder folder);
     }
+    public FolderAdapter(List<Folder> folderList, OnFolderClickListener listener) {
+        this.folderList = folderList;
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public FolderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -28,14 +36,20 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
 
     @Override
     public void onBindViewHolder(@NonNull FolderAdapter.FolderViewHolder holder, int position) {
-        FolderModel folderrow=folderModelList.get(position);
+        Folder folderrow=folderList.get(position);
         holder.folderName.setText(folderrow.folderName);
-        holder.fileCount.setText(folderrow.fileCount);
+        holder.fileCount.setText("0");
+        holder.itemView.setOnClickListener(v -> listener.onFolderClick(folderrow));
     }
 
     @Override
     public int getItemCount() {
-        return folderModelList.size();
+        return folderList.size();
+    }
+
+    public void updateFolders(List<Folder> newFolders) {
+        this.folderList = newFolders;
+        notifyDataSetChanged();
     }
 
     static class FolderViewHolder extends RecyclerView.ViewHolder{

@@ -86,6 +86,7 @@
     android:gravity="center"
     android:layout_height="wrap_content">
     <ImageButton
+        android:id="@+id/btnHome"
         android:layout_width="26dp"
         android:layout_height="26dp"
         app:backgroundTint="#1AFFFFFF"

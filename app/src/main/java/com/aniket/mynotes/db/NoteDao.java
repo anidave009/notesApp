@@ -25,4 +25,7 @@ public interface NoteDao {
     @Query("SELECT * FROM notes_table ORDER BY id desc")
     LiveData<List<Note>> getAllNotes(
     );
+    // Notes inside a specific folder — used by FolderDetailActivity
+    @Query("SELECT * FROM notes_table WHERE folderId = :folderId ORDER BY id DESC")
+    LiveData<List<Note>> getNotesByFolder(int folderId);
 }

@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".ui.DetailActivity"/>
         <activity android:name=".ui.FolderActivity"/>
+        <activity android:name=".ui.FolderDetailActivity"/>
     </application>
 
 </manifest>
