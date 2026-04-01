@@ -55,11 +55,12 @@ public class NoteViewModel extends AndroidViewModel {
         repository.insert(note);
     }
 
-    public void update(int id, String title, String content) {
+    public void update(int id, String title, String content,Integer folderId) {
         String date = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
                 .format(new Date());
         Note note = new Note(title, content, date);
         note.id = id;
+        note.folderId = folderId == -1 ? null : folderId;
         repository.update(note);
     }
 

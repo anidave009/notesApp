@@ -15,12 +15,15 @@ import com.aniket.mynotes.R;
 public class DetailActivity extends AppCompatActivity {
 
     NoteViewModel noteViewModel;
-    int noteId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        int folderId=getIntent().getIntExtra("FOLDER_ID",-1);
+        int noteId = getIntent().getIntExtra("NOTE_ID", -1);
+
 
         EditText editTitle = findViewById(R.id.etTitle);
         EditText editContent = findViewById(R.id.etContent);
@@ -31,7 +34,6 @@ public class DetailActivity extends AppCompatActivity {
 
         String title = getIntent().getStringExtra("NOTE_TITLE");
         String content = getIntent().getStringExtra("NOTE_CONTENT");
-        noteId = getIntent().getIntExtra("NOTE_ID", -1);
 
         if (title != null) editTitle.setText(title);
         if (content != null) editContent.setText(content);
@@ -49,11 +51,15 @@ public class DetailActivity extends AppCompatActivity {
             }
 
             if (noteId == -1) {
-                // new note — insert
-                noteViewModel.insert(newTitle, newContent);
+                if (folderId != -1) {
+                    // created from inside a folder
+                    noteViewModel.insert(newTitle, newContent, folderId);
+                } else {
+                    // created from MainActivity — no folder
+                    noteViewModel.insert(newTitle, newContent);
+                }
             } else {
-                // existing note — update
-                noteViewModel.update(noteId, newTitle, newContent);
+                noteViewModel.update(noteId, newTitle, newContent,folderId);
             }
 
             // go back — LiveData in MainActivity will auto-update the list
