@@ -31,11 +31,11 @@ public class FolderActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        FolderAdapter adapter = new FolderAdapter(new ArrayList<>(), folder -> {
+        FolderAdapter adapter = new FolderAdapter(new ArrayList<>(), folderrow -> {
             // navigate to folder detail — coming next
             Intent intent = new Intent(FolderActivity.this, FolderDetailActivity.class);
-            intent.putExtra("FOLDER_ID", folder.id);
-            intent.putExtra("FOLDER_NAME", folder.folderName);
+            intent.putExtra("FOLDER_ID", folderrow.id);
+            intent.putExtra("FOLDER_NAME", folderrow.folderName);
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);

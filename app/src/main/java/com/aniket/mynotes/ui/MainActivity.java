@@ -10,9 +10,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aniket.mynotes.model.Note;
 import com.aniket.mynotes.viewmodel.NoteViewModel;
 import com.aniket.mynotes.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Adapter starts with empty list — LiveData will populate it
+        //concept of anonymous class , lambda is used over here .
         NotesAdapter adapter = new NotesAdapter(new java.util.ArrayList<>(), note -> {
             Intent intent = new Intent(MainActivity.this, DetailActivity.class);
             intent.putExtra("NOTE_TITLE", note.title);
@@ -34,6 +38,22 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("NOTE_ID", note.id);
             startActivity(intent);
         });
+
+        //same way of writing the code without using lambda fn .
+//        NotesAdapter adapter = new NotesAdapter(
+//                new ArrayList<>(),
+//                new NotesAdapter.OnNoteClickListener() {
+//                    @Override
+//                    public void onNoteClick(Note note) {
+//                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+//                        intent.putExtra("NOTE_TITLE", note.title);
+//                        intent.putExtra("NOTE_CONTENT", note.content);
+//                        intent.putExtra("NOTE_ID", note.id);
+//                        startActivity(intent);
+//                    }
+//                }
+//        );
+
 
         recyclerView.setAdapter(adapter);
 
@@ -87,3 +107,19 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(intent);
 //            }
 //        });
+
+
+
+//class MyClickListener implements NotesAdapter.OnNoteClickListener {
+//    @Override
+//    public void onNoteClick(Note note) {
+//        // logic
+//    }
+//}
+//NotesAdapter.OnNoteClickListener listener =
+//        new NotesAdapter.OnNoteClickListener() {
+//            @Override
+//            public void onNoteClick(Note note) {
+//                // logic
+//            }
+//        };
