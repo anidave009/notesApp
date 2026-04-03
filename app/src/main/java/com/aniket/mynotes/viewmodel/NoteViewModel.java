@@ -30,21 +30,33 @@ public class NoteViewModel extends AndroidViewModel {
         return allNotes;
     }
 
-    // all business logic lives here — not in Activity
-
-    public void insert(String title, String content) {
-        // date formatting is business logic — belongs in ViewModel not Activity
-        String date = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-                .format(new Date());
-        repository.insert(new Note(title, content, date));
+    // called by FolderDetailActivity — returns only notes in that folder
+    public LiveData<List<Note>> getNotesByFolder(int folderId) {
+        return repository.getNotesByFolder(folderId);
     }
 
-    public void update(int id, String title, String content) {
+    // insert without folder — used by MainActivity flow
+    public void insert(String title, String content) {
+        insert(title, content, null);
+    }
+
+    // all business logic lives here — not in Activity
+
+    // insert with folder — used by FolderDetailActivity flow
+    public void insert(String title, String content, Integer folderId) {
         String date = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
                 .format(new Date());
         Note note = new Note(title, content, date);
-        // must set id so Room knows which row to update
+        note.folderId = folderId; // null if called from main flow
+        repository.insert(note);
+    }
+
+    public void update(int id, String title, String content,Integer folderId) {
+        String date = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+                .format(new Date());
+        Note note = new Note(title, content, date);
         note.id = id;
+        note.folderId = folderId == -1 ? null : folderId;
         repository.update(note);
     }
 
