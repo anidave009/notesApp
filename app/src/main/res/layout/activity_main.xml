@@ -40,6 +40,7 @@
             style="@style/IconOptions"
             />
         <ImageButton
+            android:id="@+id/threedotoptions"
             android:src="@drawable/ic_options"
             style="@style/IconOptions"
             />

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aniket.mynotes.model.Note;
 import com.aniket.mynotes.R;
 
+import java.util.Collections;
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
@@ -54,6 +55,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         return notes.size();
     }
 
+    public Note getNoteAt(int position) {
+        return notes.get(position);
+    }
+    public void swapItems(int fromPosition, int toPosition) {
+        Collections.swap(notes, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+    }
     // add this method inside NotesAdapter class
     public void updateNotes(List<Note> newNotes) {
         this.notes = newNotes;

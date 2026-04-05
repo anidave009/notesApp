@@ -38,6 +38,10 @@ public class FolderViewModel extends AndroidViewModel {
         repository.delete(folder);
     }
 
+    public void update(Folder folder) {
+        repository.update(folder);
+    }
+
     public boolean isValidFolder(String name) {
         return name != null && !name.trim().isEmpty();
     }

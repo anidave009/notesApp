@@ -12,18 +12,26 @@ import com.aniket.mynotes.R;
 import com.aniket.mynotes.model.Folder;
 import com.aniket.mynotes.model.Folder;
 
+import java.util.Collections;
 import java.util.List;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderViewHolder> {
     List<Folder> folderList;
     OnFolderClickListener listener;
+    OnFolderLongClickListener longClickListener;
 
     public interface OnFolderClickListener {
         void onFolderClick(Folder folder);
     }
-    public FolderAdapter(List<Folder> folderList, OnFolderClickListener listener) {
+
+    public interface OnFolderLongClickListener {
+        void onFolderLongClick(Folder folder, View anchorView);
+    }
+    public FolderAdapter(List<Folder> folderList, OnFolderClickListener listener,
+                         OnFolderLongClickListener longClickListener) {
         this.folderList = folderList;
         this.listener = listener;
+        this.longClickListener=longClickListener;
     }
 
     @NonNull
@@ -40,6 +48,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         holder.folderName.setText(folderrow.folderName);
         holder.fileCount.setText("0");
         holder.itemView.setOnClickListener(v -> listener.onFolderClick(folderrow));
+        holder.itemView.setOnLongClickListener(v -> {
+            longClickListener.onFolderLongClick(folderrow, v);
+            return true;
+        });
     }
 
     @Override
@@ -47,6 +59,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         return folderList.size();
     }
 
+    public Folder getFolderAt(int position) {
+        return folderList.get(position);
+    }
     public void updateFolders(List<Folder> newFolders) {
         this.folderList = newFolders;
         notifyDataSetChanged();

@@ -4,22 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aniket.mynotes.R;
-import com.aniket.mynotes.model.FolderModel;
+import com.aniket.mynotes.model.Folder;
 import com.aniket.mynotes.viewmodel.FolderViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FolderActivity extends AppCompatActivity {
     FolderViewModel folderViewModel;
@@ -37,10 +39,61 @@ public class FolderActivity extends AppCompatActivity {
             intent.putExtra("FOLDER_ID", folderrow.id);
             intent.putExtra("FOLDER_NAME", folderrow.folderName);
             startActivity(intent);
+        },(folder, anchorView) -> {
+            PopupMenu popup = new PopupMenu(FolderActivity.this, anchorView);
+            popup.inflate(R.menu.menu_folder_options);
+
+            popup.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == R.id.action_rename) {
+                    showRenameDialog(folder);
+                    return true;
+                }
+                return false;
+            });
+
+            popup.show();
         });
         recyclerView.setAdapter(adapter);
-
         folderViewModel = new ViewModelProvider(this).get(FolderViewModel.class);
+
+        // Step 1: Create the callback separately
+        ItemTouchHelper.SimpleCallback swipeToDeleteCallback =
+                new ItemTouchHelper.SimpleCallback(
+                        ItemTouchHelper.UP |ItemTouchHelper.DOWN, // no drag
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT // allow swipe
+                ) {
+
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView,
+                                          RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                        Folder swipedFolder = adapter.getFolderAt(viewHolder.getBindingAdapterPosition());
+
+                        new AlertDialog.Builder(FolderActivity.this)
+                                .setTitle("Delete folder?")
+                                .setMessage("Folder is deleted and notes will reflect on home screen .")
+                                .setPositiveButton("Delete", (dialog, which) -> {
+                                    folderViewModel.delete(swipedFolder);
+                                })
+                                .setNegativeButton("Cancel", (dialog, which) -> {
+                                    // user cancelled — put the card back
+                                    adapter.notifyItemChanged(viewHolder.getBindingAdapterPosition());
+                                })
+                                .setCancelable(false)
+                                .show();
+                    }
+                };
+        // Step 2: Create ItemTouchHelper object
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
+
+        // Step 3: Attach it to RecyclerView
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
         folderViewModel.getAllFolders().observe(this, folders -> {
             adapter.updateFolders(folders);
         });
@@ -53,6 +106,26 @@ public class FolderActivity extends AppCompatActivity {
         homeBtn.setOnClickListener(v -> {
             finish();
         });
+    }
+    private void showRenameDialog(Folder folder) {
+        EditText input = new EditText(this);
+        input.setText(folder.folderName);  // pre-fill current name
+        input.setSelection(folder.folderName.length()); // cursor at end
+        int px = (int) (16 * getResources().getDisplayMetrics().density);
+        input.setPadding(px, px, px, px);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Rename folder")
+                .setView(input)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    String newName = input.getText().toString().trim();
+                    if (!newName.isEmpty()) {
+                        folder.folderName = newName;
+                        folderViewModel.update(folder);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
     private void showCreateFolderDialog() {
         EditText input = new EditText(this);

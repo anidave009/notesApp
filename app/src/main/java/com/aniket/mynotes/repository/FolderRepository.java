@@ -15,7 +15,7 @@ public class FolderRepository {
 
     private FolderDao folderDao;
     private LiveData<List<Folder>> allFolders;
-    private ExecutorService executor = Executors.newFixedThreadPool(2);
+    private ExecutorService executor = Executors.newFixedThreadPool(3);
 
     public FolderRepository(Application application) {
         NoteDatabase db = NoteDatabase.getInstance(application);
@@ -33,5 +33,9 @@ public class FolderRepository {
 
     public void delete(Folder folder) {
         executor.execute(() -> folderDao.delete(folder));
+    }
+
+    public void update(Folder folder) {
+        executor.execute(() -> folderDao.update(folder));
     }
 }
