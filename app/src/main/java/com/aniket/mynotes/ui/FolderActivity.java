@@ -51,7 +51,7 @@ public class FolderActivity extends AppCompatActivity {
         // bottom tab — folder tab is already here, home goes back to MainActivity
         ImageButton homeBtn = findViewById(R.id.btnHome);
         homeBtn.setOnClickListener(v -> {
-            startActivity(new Intent(FolderActivity.this, MainActivity.class));
+            finish();
         });
     }
     private void showCreateFolderDialog() {

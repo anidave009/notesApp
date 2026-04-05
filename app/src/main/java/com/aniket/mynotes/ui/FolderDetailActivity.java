@@ -59,5 +59,10 @@ public class FolderDetailActivity extends AppCompatActivity {
             intent.putExtra("FOLDER_ID", folderId);
             startActivity(intent);
         });
+
+        ImageButton btnBack= findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v->{
+            finish();
+        });
     }
 }

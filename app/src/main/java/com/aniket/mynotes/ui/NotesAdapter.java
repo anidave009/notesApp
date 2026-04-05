@@ -21,9 +21,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     //  2: Interface definition — one method that fires when a card is tapped
     // MainActivity implements this and decides what to do (start DetailActivity)
-    public interface OnNoteClickListener {
-        void onNoteClick(Note note);
-    }
+    public interface OnNoteClickListener { void onNoteClick(Note note);}
 
     //  3: Constructor now accepts the listener alongside the notes list
     public NotesAdapter(List<Note> notes, OnNoteClickListener listener) {

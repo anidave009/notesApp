@@ -66,8 +66,7 @@ public class DetailActivity extends AppCompatActivity {
 
         ImageButton backBtn=findViewById(R.id.btnBack);
         backBtn.setOnClickListener(v->{
-            Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-            startActivity(intent);
+            finish();
         });
     }
 }
