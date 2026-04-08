@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,10 +46,11 @@ public class FolderDetail extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         FloatingActionButton fab = view.findViewById(R.id.fabAddNewNote);
         ImageButton btnBack = view.findViewById(R.id.btnBack);
+        ImageView emptyImage = view.findViewById(R.id.emptyImage);
+        TextView emptyText = view.findViewById(R.id.emptyText);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // 🔥 Get arguments instead of Intent
         Bundle args = getArguments();
         if (args != null) {
             folderId = args.getInt("folderId", -1);
@@ -113,6 +115,17 @@ public class FolderDetail extends Fragment {
         noteViewModel.getNotesByFolder(folderId)
                 .observe(getViewLifecycleOwner(), notes -> {
                     adapter.updateNotes(notes);
+
+                    // empty state logic
+                    if (notes.isEmpty()) {
+                        emptyImage.setVisibility(View.VISIBLE);
+                        emptyText.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    } else {
+                        emptyImage.setVisibility(View.GONE);
+                        emptyText.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
                 });
 
         fab.setOnClickListener(v -> {

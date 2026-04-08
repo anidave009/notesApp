@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +43,8 @@ public class FolderFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_folder, container, false);
+        ImageView emptyImage = view.findViewById(R.id.emptyImage);
+        TextView emptyText = view.findViewById(R.id.emptyText);
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -49,7 +53,8 @@ public class FolderFragment extends Fragment {
                 folderrow -> {
                     // Navigate using Navigation Component
                     Bundle bundle = new Bundle();
-                    bundle.putString("folder", folderrow.folderName);
+                    bundle.putInt("folderId",folderrow.id);
+                    bundle.putString("folderName", folderrow.folderName);
 
                     Navigation.findNavController(view)
                             .navigate(R.id.action_folderFragment_to_folderDetail, bundle);
@@ -108,6 +113,16 @@ public class FolderFragment extends Fragment {
 
         folderViewModel.getAllFolders().observe(getViewLifecycleOwner(), folders -> {
             adapter.updateFolders(folders);
+
+            if (folders.isEmpty()) {
+                emptyImage.setVisibility(View.VISIBLE);
+                emptyText.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            } else {
+                emptyImage.setVisibility(View.GONE);
+                emptyText.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
         });
 
         FloatingActionButton fab = view.findViewById(R.id.fabAddNewNote);
