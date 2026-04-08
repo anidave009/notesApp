@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/notesFragment">
+
+    <fragment
+    android:id="@+id/notesFragment"
+    android:name="com.aniket.mynotes.ui.fragments.NotesFragment"
+    android:label="notes"
+        >
+        <action
+            android:id="@+id/action_notesFragment_to_notesDetail"
+            app:destination="@id/notesDetail" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/folderFragment"
+        android:name="com.aniket.mynotes.ui.fragments.FolderFragment"
+        android:label="fragment_folder"
+        tools:layout="@layout/fragment_folder" >
+        <action
+            android:id="@+id/action_folderFragment_to_folderDetail"
+            app:destination="@+id/folderDetail"
+            />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/notesDetail"
+        android:name="com.aniket.mynotes.ui.fragments.NotesDetail"
+        android:label="Note Detail">
+
+        <argument
+            android:name="noteId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+        <argument
+            android:name="folderId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="content"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
+    <fragment
+        android:id="@+id/folderDetail"
+        android:name="com.aniket.mynotes.ui.fragments.FolderDetail"
+        android:label="Folder Detail">
+
+        <argument
+            android:name="folderId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+        <argument
+            android:name="folderName"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <action
+            android:id="@+id/action_folderDetailFragment_to_notesDetailFragment"
+            app:destination="@id/notesDetail" />
+    </fragment>
+
+</navigation>
